@@ -28,9 +28,6 @@ class DB():
     def __init__(self, host, port):
         self.connector = redis.Redis(host = host, port = port, decode_responses=True)
 
-    def __repr__(self):
-    	return self.connector
-
     def load_cache(self):
     	return self.connector.json().get("session", "$")[0]
 
