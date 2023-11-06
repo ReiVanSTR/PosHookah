@@ -10,8 +10,10 @@ commit_callback = CallbackData("Commit", "action",)
 
 
 
-bill_callback = CallbackData("Bill", "level" , "action", "table") # open_bill, append, close
-order_callback = CallbackData("Order", "action", "order_id")
+
+order_callback = CallbackData("Order", "level", "action")
+
+bill_callback = CallbackData("Bill", "action", "current_table")
 
 
 menu_callback = CallbackData("Menu", "level", "action", "table")

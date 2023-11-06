@@ -1,7 +1,4 @@
-import logging
 from dataclasses import dataclass, field, is_dataclass
-from typing import List
-import redis
 from ..misc.db import DB
 from ..misc.other import real_time
 
@@ -15,10 +12,58 @@ class Item():
         return {"name": self.name, "cost": self.cost}
 
 @dataclass
+class Tabacco():
+    brand: str
+    name: str
+    used: float = 0
+
+@dataclass
 class Hookah(Item):
     notes: str
     strong: int
+    used_tabacco: list = field(default_factory = list)
+    
 
+@dataclass
+class Category():
+    name: str
+    items: list = field(default_factory = list)
+    is_avalible: bool = True
+
+    def _append_item(self, item):
+        if item.get("used_tabacco"):
+            _buff = []
+            for tabacco in item.get("used_tabacco"):
+                _buff.append(Tabacco(**tabacco))
+            
+            item["used_tabacco"] = _buff
+            self.items.append(Hookah(**item))
+
+    
+
+@dataclass
+class DefaultMenu():
+     
+    def __init__(self, cache):
+        self.cache = cache
+        self.categories = self.create_categories(self.cache)
+
+    def create_categories(self, list_category: list) -> list:
+        _buff = []
+        for category in list_category:
+            _buffer_category = Category(category.get("name"))
+
+            if category.get("items"):
+                for item in category.get("items"):
+                    _buffer_category._append_item(item)
+            
+            _buff.append(_buffer_category)
+
+        return _buff
+
+    def get_categories(self) -> list:
+        return self.categories
+        
 
 @dataclass
 class Order():
@@ -78,12 +123,17 @@ class Bill():
 class Session():
     _db = DB("localhost", 6379)
 
+    def __init__(self, update: bool):
+        if update:
+            self.update()
+
     def update(self):
-        self.cache = self._db.load_cache()
+        self.cache = self._db.load_session_cache()
 
         self.worker = self.cache.get("worker")
         self.order_id = self.cache.get("order_id")
         self.bills = []
+        self.menu = DefaultMenu(self._db.load_menu_cache())
 
         if self.cache.get("rachunki"):
             for bill in self.cache.get("rachunki"):

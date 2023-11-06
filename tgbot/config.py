@@ -20,7 +20,7 @@ class TgBot:
 
 @dataclass
 class Miscellaneous:
-    other_params: str = None
+    other_params: str = None  # type: ignore
 
 
 @dataclass
@@ -30,14 +30,14 @@ class Config:
     misc: Miscellaneous
 
 
-def load_config(path: str = None):
+def load_config(path: str = None): # type: ignore
     env = Env()
     env.read_env(path)
 
     return Config(
         tg_bot=TgBot(
             token=env.str("BOT_TOKEN"),
-            admin_ids=list(map(int, env.list("ADMINS"))),
+            admin_ids=list(map(int, env.list("ADMINS"))), # type: ignore
             use_redis=env.bool("USE_REDIS"),
         ),
         db=DbConfig(

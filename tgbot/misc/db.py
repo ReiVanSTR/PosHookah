@@ -1,7 +1,5 @@
 import redis 
 
-import redis.asyncio as asredis
-
 rc = redis.Redis(host = "localhost", port = 6379, decode_responses=True)
 
 def set_new_bill(data):
@@ -28,24 +26,9 @@ class DB():
     def __init__(self, host, port):
         self.connector = redis.Redis(host = host, port = port, decode_responses=True)
 
-    def load_cache(self):
+    def load_session_cache(self) -> list:
     	return self.connector.json().get("session", "$")[0]
+	
+    def load_menu_cache(self) -> list:
+        return self.connector.json().get("default_menu", "$.categories")[0]
 
-    def __getstate__(self):
-        state = self.__dict__.copy()
-        del state['lock']
-        return state
-
-
-        
-    def get_conn(self):
-        return self.connector
-
-class AcDB():
-    def __init__(self):
-        self.client = asredis.from_url("redis://localhost:6379?decode_responses=True")
-
-    def __getstate__(self):
-        state = self.__dict__.copy()
-        del state['lock']
-        return state
