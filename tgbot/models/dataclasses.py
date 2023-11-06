@@ -87,7 +87,7 @@ class Order():
         for item in self.cart:
             _cost += item.cost
 
-        return str(_cost)
+        return _cost
 
 
 @dataclass
@@ -117,6 +117,17 @@ class Bill():
 
     def get_orders(self):
         return self.orders
+    
+    def count(self) -> int:
+        to_paymant = 0
+        if self.orders:
+            for order in self.orders:
+                to_paymant += order.count_cart()
+
+        return to_paymant
+    
+    def get_order_by_id(self, order_id):
+        return [order for order in self.orders if order.order_id == int(order_id)][0]
 
 
 @dataclass
