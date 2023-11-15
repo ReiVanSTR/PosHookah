@@ -13,7 +13,11 @@ commit_callback = CallbackData("Commit", "action",)
 
 order_callback = CallbackData("Order", "level", "action")
 
-bill_callback = CallbackData("Bill", "action", "current_table")
+bill_callback = CallbackData("Bill", "action", "data", sep = "|")
+
+category_callback = CallbackData("Category", "action", "data", sep="|")
+
+
 
 
 menu_callback = CallbackData("Menu", "level", "action", "table")

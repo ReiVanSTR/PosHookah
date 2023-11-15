@@ -22,6 +22,7 @@ class Hookah(Item):
     notes: str
     strong: int
     used_tabacco: list = field(default_factory = list)
+    type: str = "hookah"
     
 
 @dataclass
@@ -95,7 +96,7 @@ class Bill():
     table_name: str
     persons: int
     orders: list = field(default_factory = list)
-    time:dict = field(default_factory = real_time())
+    time:dict = field(default_factory = lambda: real_time())
 
     def __repr__(self):
         return self.table_name

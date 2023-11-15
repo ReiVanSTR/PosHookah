@@ -11,11 +11,14 @@ from tgbot.handlers.admin import register_admin
 from tgbot.handlers.user import register_user
 from tgbot.handlers.new_bill import register_new_bill
 from tgbot.handlers.orders import register_orders
+from tgbot.handlers.menu import register_menu
 from tgbot.middlewares.environment import EnvironmentMiddleware
 from tgbot.middlewares.session import SessionMiddleware
 from tgbot.models.dataclasses import Session
 
 logger = logging.getLogger(__name__)
+
+
 
 
 def register_all_middlewares(dp, config):
@@ -33,7 +36,7 @@ def register_all_handlers(dp):
 
     register_orders(dp)
     register_new_bill(dp)
-    # register_echo(dp)
+    register_menu(dp)
 
 
 async def main():

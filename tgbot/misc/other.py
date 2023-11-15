@@ -12,3 +12,6 @@ def real_time():
 	}
 
 	return _response
+
+def parse_time(time: dict):
+	return f"{time['day']}.{time['month']}.{time['year']}  {time['hour']}:{time['minute']}"
